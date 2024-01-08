@@ -6,34 +6,46 @@
 - X좌표와 Y좌표가 N개씩 주어진다. (1 <= X, Y <= 1000)
 
 2. 문제 풀이 방향
-- X 좌표를 오름차순으로 정렬하고 싶다. 
-=> 창고 리스트를 생성한다 (1000)
-=> 리스트[X] = Y를 대입한다.
-- Y가 커지면 높이값을 갱신한다. 다음 차례에 올 Y가 작거나 같으면 그대로 유지된다.
-- X 좌표를 움직일때마다 새롭게 갱신 혹은 유지되는 Y값들을 더해서 출력한다.
-=> 창고 전체를 순회하며 높이값(h)을 갱신 혹은 유지한다
-=> if h < list[i], h = list [i]
-=> amswer += h
+- X 좌표를 오름차순으로 정렬하여 따로 리스트(listX)에 저장한다.
+- 창고 리스트를 생성한다 (1000)
+- 리스트[X]지점의 height 값을 한 번 더 더해준다.
+- x가 특정 지점(i)에 도달할 때마다 이후의 값들(warehouse[j+1], warehouse[j+2], ..)을 순회한다. 
+    - 처음 j = i, 이며 반복될 때마다 j가 1씩 증가한다.
+- warehouse[i] >= 이후의 값(warehouse[j])이라면 
+    - height += warehouse[i]를 더해준다.
+- warehouse[i] < 이후의 값(warehouse[j])이라면 
+    - height += warehouse[j]를 더해준다.
+    - i = j를 대입해준다. 
+- 이 과정은 계속 반복되다가 i == N + 2면 멈춘다.
+- 합산한 height에 warehouse[N+1]을 더해주고 출력한다.
 """
 import sys
 
 N = int(input())
 warehouse = [0 for _ in range(1010)]
-lastX = 0
-height = 0
-answer = 0
-for index in range(N):
+height = warehouse[1]
+listX = []
+idx = 1
+skip = False
+for _ in range(N):
     x, y = map(int, sys.stdin.readline().split())
-    warehouse[x] = y
-    if index == N-1:
-        lastX = x
+    if warehouse[x] != 0:
+        warehouse[x+1] = max(warehouse[x], y)
+    else:
+        warehouse[x] = y
+    warehouse[x+1] = y    
+    listX.append(x)
+listX.sort()
 
-for i in range(1, 1001):
-    if height <= warehouse[i]:
-        height = warehouse[i]
-    print(height)
-    answer += height
-
-    if i == lastX + 1:
-        break
-print(answer)
+while idx < N:
+    for j in range(idx+1, N+1):
+        print('idx, j', idx, j)
+        if warehouse[idx] > warehouse[j]:
+            idx = j
+            continue
+        else:
+            idx += 1
+            break
+    height += warehouse[idx]
+height += warehouse[N+1]
+print(height)
