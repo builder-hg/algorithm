@@ -23,7 +23,7 @@ N = int(input())        # N은 1이상 10^16이하이다.
 share = N // 10         # 몫
 remainder = N % 10      # 나머지
 reverse_value = 0 
-if N == 1 :
+if N == 1 or N == 3 or N == 7:
     print("no")
     sys.exit()
 if remainder == 6:      # 뒤집어진 수의 초기값은 나머지로 설정한다 이때 나머지가 6이라면 9로, 9라면 6으로 바꾼다.
@@ -55,7 +55,7 @@ cnt_reverse = 0
 for i in range(1, N+1):                             # 주어진 수 N이 소수인지 판별한다.
     if i * i > N:
         break
-    if N % i == 0:
+    if N % i == 0:０
         cnt_n += 1
 
 for i in range(1, reverse_value + 1):               # 뒤집은수가 소수인지 판별한다.
