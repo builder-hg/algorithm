@@ -25,40 +25,61 @@ import sys
 
 T = int(input())
 
-# 메모리 초과
-while T:                             # 테스트 케이스만큼 반복한다.
-    A, B = map(int, input().split()) # 끈의 길이 A, B
-    K = A + B                       # 두 끈의 길이의 함 K
+# 골드바흐 -> 어떤 수가 짝수라면 두 소수의 합으로 나타낼 수 있다.
+# 홀수인 수가 소수의 합으로 나타낼 수 있냐만 확인하면된다.
+# 홀수, 짝수로 구성되어야 하는데 소수는 2를 제외하고는 다 홀수야 
+# 우리는 K-2가 소수인지만 확인하면 된다.
+# 2부터 K-2까지 순회를하면서 특정 인덱스에서 K-2를 나눴을때 그 나머지가 0이 떨어지면 소수가 아니라는 의미이므로 NO를 출력해
 
-    if K % 2 == 0:                  # 골드바흐의 추측으로 K가 짝수이면 두 소수의 합으로 나타낼 수있다.
-        print("YES")                # 따라서 YES를 출력하고 다음 케이스로 넘어간다.
-        T -= 1
+# 500 * root (4 * 10 ^ 12)
+# = 500 * 2 * 10^6
+# = 1,000 * 1,000,000 = 1,000,000,000
+# 홀수만 구하면 500,000,000
+
+
+length = 2 * (10 ** 6) + 10
+check = [True for _ in range(length)]
+check[0] = False
+check[1] = False
+clean_check = []
+for i in range(length):
+    if check[i] == False:
+        continue
+    clean_check.append(i)
+    for j in range(i * i, length, i):
+        check[j] = False
+    
+
+while T:
+    T -= 1
+    A, B = map(int, input().split())
+    K = A + B
+
+    if A == 1 and B == 1:
+        print("NO")
         continue
 
-    answer = False                  # 환상의 짝꿍 여부를 판별한다. True면 환상, False면 환장
-    check = [1 for _ in range(K+1)] # 소수값 판별 리스트, 기본값은 1로 해당 인덱스가 소수라면 1로 표시한다.
-    check[0] = 0                    # 0은 소수가 아니다.
-    check[1] = 0                    # 1은 소수가 아니다.
+    if K == 3:
+        print("NO")
+        continue
 
-    for i in range(2, K+1):         # 소수를 판별하는 용도의 반복문
-        if i * i > K:               # root K 만큼만 살펴본다.
-            break
-        if check[i] == 0 :          # 소수가 아닌 값들은 넘어간다.
-            continue
-        for j in range(i * i, K+1, i):  # i * i부터 i 씩 증가하며 소수가 아닌 부분들을 걸러낸다.
-            check[j] = 0
+    if K % 2 == 0:
+        print("YES")
+        continue
 
-    for i in range(2, K+1):             # 소수값을 판별한 리스트를 순회한다.
-        if i * i > K:                   # root K 보다 크다면 살펴보지 않는다.
+    # K-2가 소수인지 판별하자.
+    check = K - 2
+    mate = True
+    for i in clean_check: # 연산을 줄여보자. 500만번
+        if i * i > check:
             break
-        if check[i] == 1 and check[K-i] == 1:   # i의 값이 소수일 때 K-i의 값이 소수라면 환상의 짝꿍이다.
-            answer = True                       # 환상의짝꿍으로 True를 대입한다.
+        if check % i == 0:
+            mate = False
             break
-    if answer :                         # 환상의 짝꿍이면 YES를 출력한다.
+    if mate: 
         print("YES")
     else:
         print("NO")
-    T -= 1
 
 # while T:
 #     A, B = map(int, input().split())
