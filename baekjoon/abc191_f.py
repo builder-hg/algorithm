@@ -75,23 +75,64 @@ import sys
 N = int(input())
 lst = list(map(int, sys.stdin.readline().split()))
 minV = min(lst)
-GCD_wrap = []
-ans = 1     # 최솟값을 포함하고 시작한다.
-
-# 필요한 연산, 1부터 N-1까지의 수 중 최대공약수로 만들 수 있는 경우를 생각한다.
-
+gcd_wrap = []
+ans = 1
 
 for i in range(N):
-    for j in range(i, N):
-        numA = lst[i] 
-        numB = lst[j]
-        while numB:
-            numA, numB = numB, numA % numB
-        GCD_wrap.append(numA)
+  for j in range(i+1, N):
+    numA=lst[i]
+    numB=lst[j]
+    while numB:
+      numA, numB = numB, numA % numB
+    if numA < minV:
+        gcd_wrap.append(numA)
 
-GCD_wrap = set(GCD_wrap)
-for i in range(1, minV):
-    if i in GCD_wrap:
-        ans += 1
+# 안되는 애들은 뭐가있을까? 사실 후보에 들어가면 안되는 애들 뭐가 있을까? x
+# 답이 되는데 안 본 애들이 있다는 이야기다. 
+# 3개를 GCD 해보았을 때 a,b,c가 있을 때 (a,b),(a,c),(b,c) 뿐만아니라 (a,b,c)를 놓치고 있는게 아닐까?
 
-print(ans)
+
+gcd_wrap = set(gcd_wrap)
+print(gcd_wrap)
+print(len(gcd_wrap) + 1)
+
+# ===========================================================
+# N = int(input())
+# A = list(map(int, input().split()))
+
+# def gcd(a, b):
+#     if b: return gcd(b, a%b)
+#     return a
+
+# def divisors(n):
+#     res = []
+#     for i in range(1, n+1):
+#         if i * i > n: break
+#         if n % i != 0: continue
+#         res.append(i)
+#         if i * i != n:
+#             res.append(n // i)
+#     res.sort()
+#     return res
+
+# print("dict는 key를 약수로 가진 수들의 최대공약수다.")
+# dict = {}
+# for i in range(N):
+#     # print("divisors","(A[",i,"])", divisors(A[i]));
+#     for prime in divisors(A[i]):
+#         # print("A[i]",A[i],"prime", prime)
+#         if prime  in dict:
+#             # print("dict", dict)
+#             # print("기존 dict내 값",dict[prime], "새롭게 비교할 값", A[i])
+#             dict[prime] = gcd(dict[prime], A[i])
+#         else:
+#             # print("새롭게 추가될 값", A[i])
+#             dict[prime] = A[i]
+# print(dict)
+# ans = 0
+# minA = min(A)
+# for k, v in dict.items():
+#     print(k, v)
+#     if k == v and k <= minA:
+#         ans += 1
+# print(ans)
