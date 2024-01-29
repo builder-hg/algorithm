@@ -33,20 +33,17 @@ import sys
 input = sys.stdin.readline
 
 N, K = map(int, input().split())
-lst = [0] + list(map(int, input().split()))
 ans = 0
 
-prefix_lst = [0 for _ in range(N+1)]
-prefix_dict = {}
+raw_lst = [0] + list(map(int, input().split()))
+prefix = [0 for _ in range(N+1)]
 
 for i in range(1, N+1):
-    prefix_lst[i] = prefix_lst[i-1] + lst[i]
+    prefix[i] = prefix[i-1] + raw_lst[i]
+    
+pre_dict = {}
 
-for i in range(1, N+1):
-    print(prefix_lst[i])
-    key = prefix_lst[i]
-    new_key = key - K
-    print(prefix_dict.get(new_key, 0) )
-    ans += prefix_dict.get(new_key, 0) 
-    prefix_dict[key] = prefix_dict.get(key, 0) + 1
+for i in range(N+1):
+    ans += pre_dict.get(prefix[i]-K, 0)
+    pre_dict[prefix[i]] = pre_dict.get(prefix[i], 0) + 1
 print(ans)
