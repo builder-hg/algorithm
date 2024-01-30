@@ -18,9 +18,8 @@ import sys
 input = sys.stdin.readline
 
 N = int(input())                        # 정수의 개수
-raw = list(map(int, input().split()))   # 원본 수열
-maxV = max(raw)                         # 수열 중 가장 큰 값
-raw.insert(0, 0)                        # 가장 큰 값을 구한 후 원본 수열 제일 앞에 0을 붙인다.
+raw = [0] + list(map(int, input().split()))   # 원본 수열
+maxV = float("-inf")                         # maxV 음의 값으로 초기화
 prefix = [0 for _ in range(N+1)]        # 누적합 배열
 for i in range(1, N+1):
     prefix[i] = prefix[i-1] + raw[i]
@@ -30,9 +29,10 @@ e = 1                                   # 끝지점
 while e < N + 1:                        # 수열 전체를 순회할 때 까지 반복한다.
     tempV = prefix[e] - prefix[s]       # s - e 구간의 누적합과 이전에 구한 누적합 값을 비교하여
     maxV = max(maxV, tempV)             # 큰 값을 저장한다.
-    if prefix[e] < 0:                   # 누적합이 음수가 되고 해당 인덱스의 수열값이 음수라면, s를 e지점으로 이동시킨다.
-        if raw[e] < 0:  
-            s = e   
+    if prefix[e] < prefix[s]:                   # 누적합이 음수가 되고 해당 인덱스의 수열값이 음수라면, s를 e지점으로 이동시킨다.
+        s = e   
     e += 1
 
 print(maxV)
+
+# 5  -3  2  반례
