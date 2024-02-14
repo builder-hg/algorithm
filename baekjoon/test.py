@@ -1,33 +1,43 @@
-import sys
-N = int(input())
-str = input()
-lst = list(str)
-ans_wrap = []
-dict = {}
-cnt = 0
-types = []    
-s = 0               
-e = 0
-maxV = 0         
+n = int(input())
+arrN = list(map(int, input().split()))
+m = int(input())
+arrM = list(map(int, input().split()))
+arrN.sort()
 
-while s <= e < len(lst):
-    if lst[e] in types:  # 새로 이동한 지점에 위치한 타입이 기존에 있던 타입이라면
-        cnt += 1        # cnt를 1증가시킨다.
-        dict[lst[e]] += 1
-        e += 1          # 끝지점을 한칸 뒤로 이동시킨다.
-    else:               # 새로 이동한 지점에 위치한 타입이 기존에 없는 경우
-        if len(types) < N:     # 1) 새롭게 타입을 추가해야하는 경우
-            cnt += 1
-            types.append(lst[e])
-            dict[lst[e]] = 1
-            e += 1
-        else:                # 2) 기존타입을 삭제하고 추가해야 하는경우
-            
-            # maxV = max(maxV, cnt)
-            # dict[lst[s]] -= 1
-            # cnt -= 1
-            # if dict[lst[s]] == 0:
-            #     types.remove(lst[s])
-            # s += 1
-maxV = max(cnt, maxV)
-print(maxV)
+def lower_bound(x):
+    s = 0
+    e = n-1
+    ans = 0
+
+    while s <= e:
+        mid = (s+e) // 2
+        if arrN[mid] >= x:
+            ans = mid
+            e = mid - 1
+        else:
+            s = mid + 1
+
+    return ans
+
+def upper_bound(x):
+    s = 0
+    e = n-1
+    ans = -1
+
+    while s <= e:
+        mid = (s+e) // 2
+        if arrN[mid] <= x:
+            ans = mid
+            s = mid + 1
+        else:
+            e = mid - 1
+
+    return ans
+
+for i in range(m):  
+    a = upper_bound(arrM[i])
+    b = lower_bound(arrM[i])
+    if i == m-1:
+        print(a-b+1)
+    else:
+        print(a-b+1, end=" ")
