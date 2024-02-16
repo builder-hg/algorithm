@@ -53,7 +53,12 @@ def recur(cur, start, total_red, total_green, total_blue, K):
 
     # 기저조건
     if cur == K:
-        ans = res
+        total_red //= K
+        total_green //= K
+        total_blue //= K
+        val = abs(total_red - base[0]) + abs(total_green - base[1]) + abs(total_blue - base[2])
+        if val < ans:
+            ans = val
         return
 
     # 재귀호출
