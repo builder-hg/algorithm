@@ -21,13 +21,17 @@ H가 22, M에 00 이 들어온다면
 3) H와 M의 자릿수가 서로 다른 경우 (str로 바꾸어 len을 사용한다.)
 - 순회할때 신경쓸점
 1) 자릿수가 같지 않은 경우는 과감하게 넘어간다.
-2) 
+
+
+3. H중에 X개가 되고, M 중에 Y개가 되면 
+답은 x * y이다.
 """
 import sys
 input = sys.stdin.readline
 
 H, M = map(int, input().split())
-cnt = 0
+cnt1 = 0
+cnt2 = 0
 
 #시간과 분의 자릿수가 서로 다르다면 답은 0이된다. 
 if len(str(H)) != len(str(M)):
@@ -64,23 +68,40 @@ def check_reverse(raw, limited):
 
 
 for h in range(H):
-    for m in range(M):
-        # case1) 뒤집어질 수 없는 수가 h 혹은 m에 하나라도 나온다면 넘어간다.
-        if not check(h) or not check(m):
-            continue
+    # case1) 뒤집어질 수 없는 수가 h 혹은 m에 하나라도 나온다면 넘어간다.
+    if not check(h):
+        continue
 
-        # case2) 일의 자리수라면 앞에 0을 붙인다.
-        if h < 10:
-            str_h = '0' + str(h)
-        if m < 10:
-            str_m = '0' + str(m)
+    # case2) 일의 자리수라면 앞에 0을 붙인다.
+    if h < 10:
+        str_h = '0' + str(h)
+    else:
+        str_h = str(h)
 
-        # case3) 뒤집어진 시간이 M보다 크거나 뒤집어진 분이 H보다 크다면 넘어간다.
-        if not check_reverse(str_h, M) or not check_reverse(str_m, H):
-            continue
+    # case3) 뒤집어진 시간이 M보다 크거나 뒤집어진 분이 H보다 크다면 넘어간다.
+    if not check_reverse(str_h, M):
+        continue
 
-        # 조건을 모두 통과한 경우
-        print(h, m, cnt)
-        cnt += 1
+    # 조건을 모두 통과한 경우
+    cnt1 += 1
 
-print(cnt)
+
+for m in range(M):
+    # case1) 뒤집어질 수 없는 수가 h 혹은 m에 하나라도 나온다면 넘어간다.
+    if not check(m):
+        continue
+
+    # case2) 일의 자리수라면 앞에 0을 붙인다.
+    if m < 10:
+        str_m = '0' + str(m)
+    else:
+        str_m = str(m)
+
+    # case3) 뒤집어진 시간이 M보다 크거나 뒤집어진 분이 H보다 크다면 넘어간다.
+    if not check_reverse(str_m, H):
+        continue
+
+    # 조건을 모두 통과한 경우
+    cnt2 += 1
+
+print(cnt1 * cnt2)
