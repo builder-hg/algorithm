@@ -15,63 +15,51 @@
 3) 재귀호출
 - cur, 시작지점, R물감의합, G물감의합, B물감의합, 넘겨야할 값 K(섞을 물감의 개수)
 """
+
 import sys
 input = sys.stdin.readline
 
 N = int(input())
 arr = [list(map(int, input().split())) for _ in range(N)]
 base = list(map(int, input().split()))
-lst = [0, 0, 0]
 ans = 1 << 64
-leng = range(2, N+1)
-if N <= 7:
-    leng = range(2, 8)
+total_red = 0
+total_green = 0
+total_blue = 0
 
-def check(cur, total_red, total_green, total_blue, K):
-    if cur <= 1:
-        return True, 0
-    
-    if cur > 7:
-        return False, -1
-    
-    total_red //= K
-    total_green //= K
-    total_blue //= K
-    val = abs(total_red - base[0]) + abs(total_green - base[1]) + abs(total_blue - base[2])
-    if val > ans:
-        return False, -1
+# total -> global 
+# 시간초과
+# 인자 -> 복사 => 메모리 차지 (따라서, 전역변수로 관리)
 
-    return True, val
-
-def recur(cur, start, total_red, total_green, total_blue, K):
+def recur(cur, start):
     global ans
+    global total_red
+    global total_green
+    global total_blue
 
-    fin, res = check(cur, total_red, total_green, total_blue, K)
+        # 기저조건
+    if cur > 7 or cur == N+1:
+        return
 
-    if not fin:
-        return 
-
-    # 기저조건
-    if cur == K:
-        total_red //= K
-        total_green //= K
-        total_blue //= K
-        val = abs(total_red - base[0]) + abs(total_green - base[1]) + abs(total_blue - base[2])
+    if cur >= 2:
+        new_red = total_red // cur
+        new_green = total_green // cur
+        new_blue = total_blue // cur
+        val = abs(new_red - base[0]) + abs(new_green - base[1]) + abs(new_blue - base[2])
         if val < ans:
             ans = val
-        return
+
 
     # 재귀호출
     for i in range(start, N):
         total_red += arr[i][0]
         total_green += arr[i][1] 
         total_blue += arr[i][2]
-        recur(cur+1, i+1, total_red, total_green, total_blue, K)
+        recur(cur+1, i+1)
         total_red -= arr[i][0]
         total_green -= arr[i][1] 
         total_blue -= arr[i][2]
 
-for i in leng:
-    recur(0, 0, 0, 0, 0, i)
+recur(0, 0)
 
 print(ans)
