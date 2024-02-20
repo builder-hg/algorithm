@@ -6,6 +6,7 @@
     : 방문하는 함수, 방문하였다가 나가는 함수 두 개를 따로 구현한다.
     : 방문처리 횟수 누적한다.
     : cur == CCTV에 왔을때, 전체 배열의 크기 - 방문처리한 횟수 - CCTV 수를 구한다.
+    : 그냥 전체배열의 크기에서 방문처리된 지점의 개수를 빼자. 
 """
 import sys 
 input = sys.stdin.readline
@@ -13,8 +14,8 @@ input = sys.stdin.readline
 N, M = map(int, input().split())
 arr = [list(map(int, input().split())) for _ in range(N)]
 visited = [[False for _ in range(M)] for _ in range(N)]
-visited_count = 0
 CCTV = 0
+WALL = 0
 ans = 1 << 64
 dir1 = ['U', 'D', 'L', 'R']         # 상, 하, 좌, 우
 dir2 = ['UD', 'LR']                 # 상하, 좌우
@@ -24,86 +25,384 @@ dir4 = ['LTR', 'TRD', 'LDR', 'DLU'] # 좌상우, 상우하, 좌하우, 상좌하
 # CCTV 개수 구하기
 for i in range(N):
     for j in range(M):
-        if arr[i][j] != 0 and arr[i][j] != 6:
+        if arr[i][j] == 6:
+            WALL += 1
+            continue
+        if arr[i][j] != 0:
             CCTV += 1
 
 def come_in(dx, dy, dir):
-    global visited_count
 
     if dir == 'U':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True                
     elif dir == 'D':
-        pass
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True
     elif dir == 'L':
-        pass
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     elif dir == 'R':
-        pass
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     elif dir == 'UD':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True   
     elif dir == 'LR':
-        pass
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     elif dir == 'UR':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True  
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True   
     elif dir == 'UL':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True     
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     elif dir == 'DR':
-        pass
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     elif dir == 'DL':
-        pass
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     elif dir == 'LTR':
-        pass
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True   
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     elif dir == 'TRD':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True   
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True  
     elif dir == 'LDR':
-        pass
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     elif dir == 'DLU':
-        pass
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True
     elif dir == 'UDLR':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True 
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = True
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = True
     
     return
 
 def come_out(dx, dy, dir):
-    global visited_count
 
     if dir == 'U':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False                
     elif dir == 'D':
-        pass
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False
     elif dir == 'L':
-        pass
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
     elif dir == 'R':
-        pass
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
     elif dir == 'UD':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False   
     elif dir == 'LR':
-        pass
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            arr[dx][i] = False
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
     elif dir == 'UR':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False  
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False   
     elif dir == 'UL':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            arr[i][dy] = False     
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
     elif dir == 'DR':
-        pass
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
     elif dir == 'DL':
-        pass
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
     elif dir == 'LTR':
-        pass
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False   
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
     elif dir == 'TRD':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False   
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False  
     elif dir == 'LDR':
-        pass
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
     elif dir == 'DLU':
-        pass
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False
     elif dir == 'UDLR':
-        pass
+        for i in range(dx, -1, -1):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False 
+        for i in range(dx, N):
+            if arr[i][dy] == 6:
+                break
+
+            visited[i][dy] = False
+        for i in range(dy, -1, -1):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
+        for i in range(dy, M):
+            if arr[dx][i] == 6:
+                break
+
+            visited[dx][i] = False
+    
     
     return
 
 def recur(cur, dx, dy):
-    global visited_count
+    global ans
+    global WALL
 
     if cur == CCTV:
-        val = N * M - visited_count - CCTV
+        visited_count = 0
+        for i in range(N):
+            for j in range(M):
+                if visited[i][j]:
+                    visited_count += 1
+        val = N * M - visited_count - WALL
         if val < ans:
             ans = val
         return
@@ -114,6 +413,9 @@ def recur(cur, dx, dy):
                 continue
             
             mode = arr[i][j]
+            if mode == 0:
+                continue
+
             if mode == 1:
                 dir = ['U', 'D', 'L', 'R']
             elif mode == 2:
@@ -127,11 +429,17 @@ def recur(cur, dx, dy):
 
             for k in dir:
                 come_in(i, j, k)
-                recur(cur+1, i+1, j+1)
+                if j+1 == M:
+                    recur(cur+1, i+1, 0)
+                else:
+                    recur(cur+1, i, j+1)
+
                 come_out(i, j, k)
 
 
 recur(0,0,0)
+print(ans)
+
 """
 0. 아이디어
 1) CCTV 별 경우의 수
