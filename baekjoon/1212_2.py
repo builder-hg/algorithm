@@ -1,27 +1,32 @@
 import sys
 input = sys.stdin.readline
-# 시간초과
 
+raw = list(input().strip())
 
-N = int(input())
-arr = list(str(N))
-cnt = 0
-val = 0
+if raw == ['0']:
+    print(0)
+    sys.exit()
+    
+ans_lst = []
+for i in range(len(raw)):
+    num = int(raw[i])
+    temp = []
+    while num:
+        temp.append(num % 2)
+        num //= 2
+    temp = temp[::-1]
+    if i == 0:
+        ans_lst.append(temp)
+    else:
+        leng = len(temp)
+        required = 3 - leng
+        bump = []
+        for _ in range(required):
+            bump.append(0)
+        for j in range(leng):
+            bump.append(temp[j])
+        ans_lst.append(bump)
 
-# 2의 3승
-# 3 1 4
-# 10진수로 변환
-for i in range(len(arr)-1, -1, -1):
-    num = int(arr[i])
-    val += (num * (8 ** cnt))
-    cnt += 1
-
-ans = []
-share = val
-# 2진수로 변환
-while share > 1:
-    ans.append(share % 2)
-    share //= 2
-ans.append(share)
-
-print(*ans[::-1], sep="")
+for i in range(len(ans_lst)):
+    for j in range(len(ans_lst[i])):
+        print(ans_lst[i][j], end="")
