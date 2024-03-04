@@ -38,6 +38,27 @@ input = sys.stdin.readline
 
 lst = [list(map(int, input().split())) for _ in range(9)]
 
+def explore_square(end_x, end_y):
+    visited = [False for i in range(10)]
+    cnt = 0
+    ans = []
+    check_x, check_y = 0, 0
+    for i in range(end_x - 3, end_x):
+        for j in range(end_y - 3, end_y):
+            if lst[i][j] == 0: 
+                check_x = i
+                check_y = j
+                continue
+
+            visited[lst[i][j]] = True
+    for i in range(1,10):
+        if not visited[i]:
+            cnt += 1
+            ans.append(i)
+    if cnt == 1:
+        lst[check_x][check_y] = ans[0]
+    return 
+
 def check(x, y): # 빈 항목값을 채우기 위해 가로/세로/정사각형을 살펴본다.
     # 가로 검증
     visited = [False for i in range(10)]
@@ -47,7 +68,7 @@ def check(x, y): # 빈 항목값을 채우기 위해 가로/세로/정사각형�
         if lst[x][j] == 0: continue
 
         visited[lst[x][j]] = True
-    for i in range(10):
+    for i in range(1, 10):
         if not visited[i]:
             cnt += 1
             ans.append(i)
@@ -63,7 +84,7 @@ def check(x, y): # 빈 항목값을 채우기 위해 가로/세로/정사각형�
         if lst[j][y] == 0: continue
 
         visited[lst[j][y]] = True
-    for i in range(10):
+    for i in range(1, 10):
         if not visited[i]:
             cnt += 1
             ans.append(i)
@@ -72,21 +93,36 @@ def check(x, y): # 빈 항목값을 채우기 위해 가로/세로/정사각형�
         return 
 
     # 3 * 3 정사각형 검증
-    visited = [False for i in range(10)]
-    cnt = 0
-    ans = []
-    # 1) 0<=y<=2
+    if y >= 0 and y <= 2: # 1) 0<=y<=2
+        if x >= 0 and x <= 2: explore_square(3, 3)
+        elif x >= 3 and x <= 5: explore_square(6, 3)
+        else: explore_square(9, 3)
+    elif y >= 3 and y <= 5: # 2) 3<=y<=5
+        if x >= 0 and x <= 2: explore_square(3, 6)
+        elif x >= 3 and x <= 5: explore_square(6, 6)
+        else: explore_square(9, 6)
+    else: # 3) 6<=y
+        if x >= 0 and x <= 2: explore_square(3, 9)
+        elif x >= 3 and x <= 5: explore_square(6, 9)
+        else: explore_square(9, 9)
     
+    return
 
 
 def recur(x, y): # x는 행, y는 열
+    # y가 8보다 클 시 행을 이동시킨다.
+    if y > 8:
+        x += 1
+        y = 0
 
     # 기저조건
-    if x == 8 and y == 9:
+    if x > 8:
         for i in range(9):
             for j in range(9):
                 print(lst[i][j], end=" ")
             print()
+        sys.exit()
+        return
 
     if lst[x][y] == 0: # 입력받은 스도쿠판을 전체 순회하며 비어있는 항목에 대해서만 다음 작업을 수행한다.
         check(x, y)     
