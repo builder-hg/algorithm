@@ -105,6 +105,31 @@ def check(x, y): # 빈 항목값을 채우기 위해 가로/세로/정사각형�
         if x >= 0 and x <= 2: explore_square(3, 9)
         elif x >= 3 and x <= 5: explore_square(6, 9)
         else: explore_square(9, 9)
+
+    '''
+    feedback)
+    차라리,
+    if y >= 0 and y <= 2:
+    ny = 3
+    elif y <= 5:
+    ny = 6
+    else:
+    ny = 9
+    if x >= 0 and x <= 2:
+    nx = 3
+    elif y <= 5:
+    nx = 6
+    else:
+    nx = 9
+
+    explore_square(nx, ny)
+    
+    feedback, 2)
+    nxt = [3, 3, 3, 6, 6, 6, 9, 9, 9]
+    nx = nxt[x]
+    ny = nxt[y]
+
+    '''
     
     return
 
