@@ -1,4 +1,5 @@
 import sys
+sys.setrecursionlimit(10**6)
 input = sys.stdin.readline
 
 def recur(cur, fly, prefix_height_2_cnt, exist):
@@ -22,4 +23,4 @@ def recur(cur, fly, prefix_height_2_cnt, exist):
 
 N = int(input())
 dp = [[[[-1 for _ in range(2)] for _ in range(2)] for _ in range(3)] for _ in range(N)]
-print(recur(0, 0, 0, 0))
+print(recur(1, 0, 0, 0))
