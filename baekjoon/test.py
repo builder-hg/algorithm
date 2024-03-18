@@ -1,26 +1,19 @@
 import sys
 input = sys.stdin.readline
 
-N, S = map(int, input().split())
-arr = sorted(list(map(int, input().split())))
-cnt = 0
-init_value = 0
+n = int(input())
+dp = [[[[0 for _ in range(3)] for _ in range(3)] for _ in range(4)] for _ in range(n+1000)]
+for j in range(4):
+    for k in range(3):
+            if j > 2 or k >= 2:
+                continue
+            
+            dp[n][j][k][1] = 1
 
-def recur(cur, start, val, K):
-    global cnt
-
-    if cur > K:
-        return
-
-    if cur == K and val == S:
-        cnt += 1
-        return
-    elif cur == K and val != S:
-        return
-    
-    for i in range(start, N):
-        recur(cur + 1, i + 1, val+arr[i], K)
-
-for i in range(1, N+1):
-    recur(0,0,init_value,i)
-print(cnt)
+for i in range(1,n)[::-1]:
+        for curCnt in range(3)[::-1]:
+                for twoCnt in range(2)[::-1]:
+                        for two in range(2)[::-1]:
+                                num = dp[i+1][0][0][two] + dp[i+1][curCnt+1][0][two] + dp[i+1][curCnt+1][twoCnt+1][1]
+                                dp[i][curCnt][twoCnt][two] = num % 1000000007
+print(dp[1][0][0][0])
