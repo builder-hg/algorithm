@@ -1,35 +1,34 @@
-# import sys
-# input = sys.stdin.readline
+"""
+입력
+- 테스트 케이스의 수
+- 출발점과 도착점(x, y)
+- 행성계의 수
+- 행성계의 좌표(x, y)와 반지름(r)
 
-# t = int(input())
-# for _ in range(t):
-#     n, k = map(int, input().split())
-#     dp = [[[0 for _ in range(2)] for _ in range(110)] for _ in range(110)]
-    
-#     dp[n][k][0] = 0
-#     dp[n][k][1] = 0
-
-#     for i in range(n)[::-1]:
-#         for j in range(k)[::-1]:
-#             for l in range(2)[::-1]:
-#                 dp[i][j][l] = dp[i+1][j][0] + dp[i+1][j + k][1]
-                
-       
-#     print(dp[0][0][0])
+x가 출발점과 도착점을 포함한다면, y를 비교한다. 
+y가 출발점과 도착점을 포함한다면 카운팅한다.
+"""
 import sys
 input = sys.stdin.readline
 
-n, k = map(int, input().split())
-dp = [[[0 for _ in range(2)] for _ in range(110)] for _ in range(110)]
+Q = int(input())
+while Q:
+    Q -= 1
 
-dp[n][k][0] = 1
-dp[n][k][1] = 1
+    sx, sy, ex, ey = map(int, input().split())
+    N = int(input())
+    arr = []
+    ans = 0
+    for _ in range(N):
+        a, b, c = map(int, input().split())
+        arr.append([a, b, c])
 
-for i in range(n)[::-1]:
-    for j in range(k + 1)[::-1]:
-        for k in range(2)[::-1]:
-            ret = dp[i+1][j][0]
-            ret += dp[i+1][j + (k*k)][1]
-            dp[i][j][k] = ret
+    for i in range(N):
+        nx, ny, r = arr[i][0], arr[i][1], arr[i][2]
+        dist_start = (sx - nx) ** 2 + (sy - ny) ** 2
+        dist_end = (ex - nx) ** 2 + (ey - ny) ** 2
 
-print(dp[0][0][0])
+        if (dist_start < r ** 2 and dist_end > r ** 2) or (dist_start > r ** 2 and dist_end < r ** 2):
+            ans += 1
+
+    print(ans)
