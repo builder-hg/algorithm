@@ -1,32 +1,37 @@
+"""
+3
+NYY
+YNY
+YYN
+
+i 1 ~ N까지 순회 (자신)
+j (i+1) ~ N까지 순회(다른 요소)
+"""
 import sys
-input = sys.stdin.readline
+input = sys.stdin.readline                  
 
 N = int(input())
-arr = [list(input().strip()) for _ in range(N)]
-visited = [[0 for _ in range(N)] for _ in range(N)]
-ans = []
+v = [[False for _ in range(N)] for _ in range(N)]
+arr = []
+for i in range(1, N + 1):
+    tmp = list(input().strip())
+    arr.append(tmp)
 
+for k in range(N):
+    for i in range(N):
+        for j in range(N):
+            if i == j: continue
+
+            if arr[i][j] == 'Y' or (arr[i][k] == 'Y' and arr[j][k] == 'Y'):
+                v[i][j] = True
+
+ans = 0
 for i in range(N):
-    friends = []
-    candid = []
-    cnt = 0
-
+    tmp = 0
     for j in range(N):
-        if i == j:
-            continue
+        if v[i][j]: 
+            tmp += 1
 
-        if arr[i][j] == 'Y':
-            print(i,'의 친구는 ',j,'이다')
-            cnt += 1
-            friends.append(i)
-        else:
-            candid.append(i)
+    ans = max(ans, tmp)
 
-    for friend in friends:
-        for j in candid:
-            if arr[friend][j] == 'Y':
-                print(i,'의 친구 ', friend, '의 친구중에',j,'가 있다.')
-                cnt += 1
-
-    ans.append(cnt)
-print(max(ans))
+print(ans)

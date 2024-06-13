@@ -1,34 +1,41 @@
-"""
-입력
-- 테스트 케이스의 수
-- 출발점과 도착점(x, y)
-- 행성계의 수
-- 행성계의 좌표(x, y)와 반지름(r)
+def isNStraightHand(hand, groupSize):
+    """
+    :type hand: List[int]
+    :type groupSize: int
+    :rtype: bool
+    """
+    if len(hand) % groupSize != 0:
+        return False
 
-x가 출발점과 도착점을 포함한다면, y를 비교한다. 
-y가 출발점과 도착점을 포함한다면 카운팅한다.
-"""
-import sys
-input = sys.stdin.readline
+    _dict = {}
+    for i in range(len(hand)):
+        now = hand[i]
+        _dict[now] = _dict.get(now, 0) + 1
 
-Q = int(input())
-while Q:
-    Q -= 1
+    idx = 0
+    hand.sort()
+    while idx < len(hand):
+        now = hand[idx]
 
-    sx, sy, ex, ey = map(int, input().split())
-    N = int(input())
-    arr = []
-    ans = 0
-    for _ in range(N):
-        a, b, c = map(int, input().split())
-        arr.append([a, b, c])
+        if _dict[now] == 0:
+            idx += 1
+            continue
+        
+        _dict[now] -= 1
 
-    for i in range(N):
-        nx, ny, r = arr[i][0], arr[i][1], arr[i][2]
-        dist_start = (sx - nx) ** 2 + (sy - ny) ** 2
-        dist_end = (ex - nx) ** 2 + (ey - ny) ** 2
+        for i in range(1, groupSize):
+            nxt = now + i
 
-        if (dist_start < r ** 2 and dist_end > r ** 2) or (dist_start > r ** 2 and dist_end < r ** 2):
-            ans += 1
+            if nxt not in hand:
+                return False
+            
+            if _dict[nxt] <= 0:
+                return False
+            
+            _dict[nxt] -= 1
 
-    print(ans)
+        idx += 1
+
+    return True
+    
+print(isNStraightHand([1,2,3,6,2,3,4,7,8], 3))
