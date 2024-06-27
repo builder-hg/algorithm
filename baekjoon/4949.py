@@ -1,3 +1,33 @@
+import sys
+input = sys.stdin.readline
+
+while True:
+    arr = list(map(str, input().rstrip()))
+    
+    if len(arr) == 1 and arr[0] == '.': # 종료조건
+        break
+
+    ans = "yes"
+    cntA = 0    # 소괄호
+    cntB = 0    # 대괄호
+    for i in range(len(arr)):
+        if arr[i] == '(':
+            cntA += 1
+        elif arr[i] == '[':
+            cntB += 1
+        elif arr[i] == ')':
+            cntA -= 1
+        elif arr[i] == ']':
+            cntB -= 1
+
+        if cntA < 0 or cntB < 0:
+            ans = "no"
+            break
+
+    print(ans)
+
+
+
 """
 0. 특징파악
 1. 케이스
@@ -14,37 +44,6 @@
 - 새로운 괄호가 나온다면 가장 최근에 담은 괄호와 비교한다.
 - 어긋나게 나오지 않는다면 계속 담는다. 이때 종류에 따라 딕셔너리에 카운팅한다.
 """
-import sys
-input = sys.stdin.readline
-
-while True:
-    text = list(input())[:-1]
-    stack = []
-
-    if len(text) == 1 and text[-1] == '.':
-        break
-
-    for i in text:
-        if i == '[' or i == '(':
-            stack.append(i)
-        elif i == ']':
-            if len(stack) != 0 and stack[-1] == '[':
-                stack.pop()
-            else:
-                stack.append(']')
-                break
-        elif i == ')':
-            if len(stack) != 0 and stack[-1] == '(':
-                stack.pop()
-            else:
-                stack.append(')')
-                break
-    
-    if len(stack) == 0:
-        print("yes")
-    else:
-        print("no")
-
 
 
 """
