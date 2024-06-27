@@ -1,3 +1,50 @@
+import sys
+input = sys.stdin.readline
+
+N = int(input())
+order = []
+for i in range(N):
+    num = int(input())
+    order.append(num)
+
+num = 1
+stack = []
+op = []
+flag = True
+for i in range(N):      # order 순회
+    while num <= order[i]:  # stack에 push하는 과정
+        stack.append(num)
+        op.append('+')
+        num += 1
+
+    if stack[-1] == order[i]:   # stack에 pop하는 과정, 
+        stack.pop()
+        op.append('-')
+    else:
+        flag = False
+        break
+
+if not flag:
+    print("no")
+else:
+    for i in range(len(op)):
+        print(op[i])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 0. 문제 이해
 - 1부터 N까지 순서대로 push할 수 있다.
@@ -20,8 +67,6 @@
 num > 수열[idx]보다 크므로 stack에 해당 값이 들어있을수 있으므로 빼내준다.
 
 
-
-"""
 import sys
 input = sys.stdin.readline
 
@@ -57,3 +102,4 @@ while num <= N+1:
 
 for i in range(len(calc)):
     print(calc[i])
+"""
