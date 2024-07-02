@@ -10,19 +10,43 @@ while True:
     ans = "yes"
     cntA = 0    # 소괄호
     cntB = 0    # 대괄호
+    stack = []
     for i in range(len(arr)):
         if arr[i] == '(':
             cntA += 1
+            stack.append('(')
         elif arr[i] == '[':
             cntB += 1
+            stack.append('[')
         elif arr[i] == ')':
+            if not stack:
+                ans = "no"
+                break
+
+            latest = stack.pop()
+            if latest != '(':
+                ans = "no"
+                break
+
             cntA -= 1
         elif arr[i] == ']':
+            if not stack:
+                ans = "no"
+                break
+
+            latest = stack.pop()
+            if latest != '[':
+                ans = "no"
+                break
+
             cntB -= 1
 
         if cntA < 0 or cntB < 0:
             ans = "no"
             break
+
+    if cntA != 0 or cntB != 0:
+        ans = "no"
 
     print(ans)
 
@@ -43,6 +67,8 @@ while True:
 - 괄호가 나오면 별도의 리스트에 담는다.
 - 새로운 괄호가 나온다면 가장 최근에 담은 괄호와 비교한다.
 - 어긋나게 나오지 않는다면 계속 담는다. 이때 종류에 따라 딕셔너리에 카운팅한다.
+(t [f] (hn) t).
+
 """
 
 
