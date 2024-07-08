@@ -1,41 +1,40 @@
-def isNStraightHand(hand, groupSize):
-    """
-    :type hand: List[int]
-    :type groupSize: int
-    :rtype: bool
-    """
-    if len(hand) % groupSize != 0:
-        return False
+import sys
+input = sys.stdin.readline
 
-    _dict = {}
-    for i in range(len(hand)):
-        now = hand[i]
-        _dict[now] = _dict.get(now, 0) + 1
+def getValue():
+    ret = 0
+    for i in range(N):
+        ret += int(arr[i]) * 10 ** (N - i - 1)
+    return ret
 
-    idx = 0
-    hand.sort()
-    while idx < len(hand):
-        now = hand[idx]
+def recur(cur):
+    global ans
 
-        if _dict[now] == 0:
-            idx += 1
+    if cur == N:
+        tmp = getValue()
+        if today >= tmp:
+            return
+
+        ans = min(ans, tmp)
+
+        return
+
+    for i in range(N):
+        if visited[i]:
             continue
-        
-        _dict[now] -= 1
 
-        for i in range(1, groupSize):
-            nxt = now + i
+        visited[i] = True
+        arr[cur] = raw[i]
 
-            if nxt not in hand:
-                return False
-            
-            if _dict[nxt] <= 0:
-                return False
-            
-            _dict[nxt] -= 1
+        recur(cur + 1)
+        visited[i] = False
 
-        idx += 1
+today = int(input())
+raw = list(str(today))
+N = len(raw)
+visited = [False for _ in range(N)]
+arr = [0 for _ in range(N)]
+ans = (1 << 60)
+recur(0)
 
-    return True
-    
-print(isNStraightHand([1,2,3,6,2,3,4,7,8], 3))
+print(ans)
