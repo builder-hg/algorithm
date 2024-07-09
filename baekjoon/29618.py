@@ -3,30 +3,37 @@ input = sys.stdin.readline
 
 N, Q = map(int, input().split())
 
-raw = [0 for _ in range(N + 1)]
-for _ in range(Q):
-    s, e, k = map(int, input().split())
-    raw[s] += k
+"""
+2차원 배열을 고려한 imos
+"""
 
-    if e + 1 > N:
-        continue
-    raw[e + 1] -= k
+raw = [[] for _ in range(N + 1)]
+for i in range(1, Q + 1):
+    s, e, k = map(int, input().split())
+
+    raw[s].append([i, k])
+    if e + 1 <= N:
+        raw[e + 1].append([i, -k])
 
 print(raw)
 
-prefix = [0 for _ in range(N + 1)]
 for i in range(1, N + 1):
-    prefix[i] = prefix[i-1] + raw[i]
+    if raw[i - 1] != []:
+        raw[i].extend(raw[i - 1])
 
-ans = [0 for _ in range(N + 1)]
-for i in range(1, N+1):
-    if prefix[i] == prefix[i - 1]:
-        ans[i] = prefix[i]
-    else:
-        ans[i] = prefix[i] - prefix[i-1]
+    raw[i].sort()
 
-print(prefix)
+print(raw)
 
-"""
-순서가고려되어야해 raw 에 넣을때부터 고려해서 raw에 넣든 말든하는게 나을듯 ㅠ 
-"""
+# prefix = [0 for _ in range(N + 1)]
+# for i in range(1, N + 1):
+#     prefix[i] = prefix[i-1] + raw[i]
+
+# ans = [0 for _ in range(N + 1)]
+# for i in range(1, N+1):
+#     if prefix[i] == prefix[i - 1]:
+#         ans[i] = prefix[i]
+#     else:
+#         ans[i] = prefix[i] - prefix[i-1]
+
+# print(prefix)
