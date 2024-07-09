@@ -9,18 +9,22 @@ for i in range(N):
     for _ in range(Q):
         s, e = map(int, input().split())
         raw[s] +=1
-        raw[e + 1] -= 1
+        raw[e] -= 1
+
+cnt = [0 for _ in range(100001)]
+for i in range(1, 100001):
+    cnt[i] = cnt[i - 1] + raw[i - 1]
 
 prefix = [0 for _ in range(100001)]
-for i in range(100001):
-    if i == 0:
-        prefix[i] = raw[i]
-        continue
+for i in range(1, 100001):
+    prefix[i] = prefix[i - 1] + cnt[i]
 
-    prefix[i] = prefix[i - 1] + raw[i]
+prv = prefix[T] - prefix[0]
+ans = [0, T]
+for i in range(T, 100001):
+    cur = prefix[i] - prefix[i - T]
+    if prv < cur:
+        prv = cur
+        ans = [i - T, i]
 
-_sum = [0 for _ in range(100001)]
-_sum[0] = prefix[0]
-_sum[1] = prefix[1]
-_sum[2] = prefix[2]
-_sum[3] = prefix[3]
+print(*ans)
