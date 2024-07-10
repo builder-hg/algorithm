@@ -1,40 +1,30 @@
 import sys
 input = sys.stdin.readline
 
-def getValue():
-    ret = 0
-    for i in range(N):
-        ret += int(arr[i]) * 10 ** (N - i - 1)
-    return ret
+s = [0] + list(input().strip())
+prefix = [0] * (len(s))
+cnt = [0] * (len(s))
+minidx = {}
 
-def recur(cur):
-    global ans
+for i in range(1, len(s)):
+    n = 0
+    if s[i] == 'S':
+        n = 2
+    if s[i] == 'K':
+        n = -1
+    prefix[i] = prefix[i - 1] + n
+    cnt[i] = cnt[i - 1] + (0 if n == 0 else 1)
 
-    if cur == N:
-        tmp = getValue()
-        if today >= tmp:
-            return
+ans = -1
 
-        ans = min(ans, tmp)
-
-        return
-
-    for i in range(N):
-        if visited[i]:
+for i in range(len(s)):
+    cur = prefix[i]
+    if prefix[i] not in minidx:
+        minidx[prefix[i]] = i
+    else:
+        prv_index = minidx[prefix[i]]
+        if cnt[prv_index] == cnt[i]:
             continue
-
-        visited[i] = True
-        arr[cur] = raw[i]
-
-        recur(cur + 1)
-        visited[i] = False
-
-today = int(input())
-raw = list(str(today))
-N = len(raw)
-visited = [False for _ in range(N)]
-arr = [0 for _ in range(N)]
-ans = (1 << 60)
-recur(0)
+        ans = max(ans, i - prv_index)
 
 print(ans)
