@@ -1,30 +1,24 @@
-import sys
-input = sys.stdin.readline
+N = 6
+arr = [10, 20, 10, 30, 20, 50]
 
-s = [0] + list(input().strip())
-prefix = [0] * (len(s))
-cnt = [0] * (len(s))
-minidx = {}
+dp = [1 for _ in range(N)]
+prv = [-1 for _ in range(N)]
 
-for i in range(1, len(s)):
-    n = 0
-    if s[i] == 'S':
-        n = 2
-    if s[i] == 'K':
-        n = -1
-    prefix[i] = prefix[i - 1] + n
-    cnt[i] = cnt[i - 1] + (0 if n == 0 else 1)
+for i in range(N):
+    for j in range(i):
+        if arr[j] >= arr[i]: continue
 
-ans = -1
+        if dp[j] + 1 > dp[i]:
+            dp[i] = dp[j] + 1
+            prv[i] = j
 
-for i in range(len(s)):
-    cur = prefix[i]
-    if prefix[i] not in minidx:
-        minidx[prefix[i]] = i
-    else:
-        prv_index = minidx[prefix[i]]
-        if cnt[prv_index] == cnt[i]:
-            continue
-        ans = max(ans, i - prv_index)
+ans = 0
+idx = 0
+for i in range(N):
+    if ans < dp[i]:
+        ans = dp[i]
+        idx = i
 
-print(ans)
+while idx != -1:
+    print(arr[idx])
+    idx = prv[idx]

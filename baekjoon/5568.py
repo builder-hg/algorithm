@@ -1,36 +1,40 @@
-import sys
+import sys 
 input = sys.stdin.readline
 
-def recur(cur, cnt):
-	if cur == N: # 끝까지 다 살펴본 경우
-		if cnt != K:
-			return
-		
-		tmp = ''
-		for i in range(cnt):
-			tmp += str(arr[i])
-		ans.append(tmp)
-		return
+def recur(cur):
+    if len(lst) == K:
+        tmp = ''
+        for item in lst:
+            tmp += item
+        ans.append(tmp)
 
-	for i in range(N):
-		if visited[i]:
-			continue
-		visited[i] = True
-		arr[cur] = i
-		recur(cur + 1)
-		visited[i] = False
+        return
+    
+    if cur == N:
+        return
 
+    for i in range(N):
+        if visited[i]:
+            continue
+
+        visited[i] = True
+        lst.append(str(raw[i]))
+        recur(cur + 1)
+
+        visited[i] = False
+        lst.pop()
 
 N = int(input())
 K = int(input())
 raw = []
 for _ in range(N):
-    a = int(input())
-    raw.append(a)
+    x = int(input())
+    raw.append(x)
 
-arr = [0 for _ in range(N)]
-visited = [False for _ in range(N)]
+lst = []
 ans = []
-recur(0, 0)
-print(ans)
+visited = [False for _ in range(N)]
+recur(0)
+
+ans = list(set(ans))
 print(len(ans))
