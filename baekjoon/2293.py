@@ -1,3 +1,23 @@
+# 10만보다 커진다면 바텀업 DP를 생각해보자.
+import sys 
+input = sys.stdin.readline
+
+N, K = map(int, input().split())
+raw = []
+for _ in range(N):
+    tmp = int(input())
+    raw.append(tmp)
+raw.sort()
+
+dp = [0 for _ in range(K + 1)]
+dp[0] = 1
+for coin in raw:
+    for i in range(coin,  K + 1):
+        dp[i] += dp[i - coin]
+
+print(dp[K])
+"""
+# 탑다운 DP
 import sys
 sys.setrecursionlimit(10 ** 6)
 input = sys.stdin.readline
@@ -23,35 +43,6 @@ def recur(cur, val):
 
         ret += recur(cur + 1, val + tmp)
 
-    dp[cur][val] = ret
-    return dp[cur][val]
-
-
-N, K = map(int, input().split())
-raw = []
-for _ in range(N):
-    tmp = int(input())
-    raw.append(tmp)
-dp = [[-1 for _ in range(10010)] for _ in range(101)]
-ans = recur(0, 0)
-print(ans)
-
-
-"""
-def recur(cur, val):
-    if val > K:
-        return 0
-    
-    if val == K:
-        return 1
-    
-    if dp[cur][val] != -1:
-        return dp[cur][val]
-    
-    ret = 0
-    for i in range(cur, N):
-        ret += recur(i, val + raw[i])
-    
     dp[cur][val] = ret
     return dp[cur][val]
 
