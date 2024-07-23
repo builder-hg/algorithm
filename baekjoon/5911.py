@@ -1,30 +1,29 @@
-"""
-1번부터 N번까지 쿠폰이 각각 적용 되었을 때, (최대 1,000번)
-N개중 가능한 경우를 구한다.                 (최대 1,000번)
-=> 1,000 * 1,000 = 1,000,000번으로 완전탐색을 해본다.
-"""
 import sys
 input = sys.stdin.readline
 
-N, K = map(int, input().split())
+N, K = map(int, input().split())    # 인원 N, 제한가 K
 raw = [list(map(int, input().split())) for _ in range(N)]
 
 ans = 0
-for i in range(N):
-    data = []
-    pay = raw[i][0] / 2 + raw[i][1]
-    if pay <= K:
-        tmp += 1
-    else:
-        pay = 0
+for i in range(N):                  # 쿠폰을 적용할 선물을 고르는 경우
+    arr = [raw[i][0] / 2 + raw[i][1]]
     for j in range(N):
-        if i == j: continue
+        if i == j:
+            continue
 
-        pay += raw[j][0] + raw[j][1]
-        if pay <= K:
-            tmp += 1
-        else:
-            pay -= raw[j][0] + raw[j][1]
+        tmp = raw[j][0] + raw[j][1]
+        arr.append(tmp)
+    arr.sort()
+    
+    val = 0
+    tmp = 0
+    for j in range(N):
+        val += arr[j]
 
+        if val > K:
+            break
+
+        tmp += 1
     ans = max(ans, tmp)
+
 print(ans)
