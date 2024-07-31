@@ -1,24 +1,37 @@
 import sys
+sys.setrecursionlimit(100010)
 input = sys.stdin.readline
 
+def recur(cur, use):
+    global cnt 
+
+    if cnt == (N // 2):
+        return 0
+
+    if cur >= N:
+        return 0
+    
+    if dp[cur][use] != -1:
+        return dp[cur][use]
+    
+    cnt += 1
+    ret = recur(cur + 2, use) + raw[cur]           # 밑장빼기를 사용하지 않는 경우
+    cnt -= 1
+    if not use:
+        cnt += 1
+        ret = max(ret, recur(cur + 1, 1) + raw[-1])       # 내가 밑장빼기를 사용하는 경우
+        cnt -= 1
+    if not use:                                 # 상대가 밑장뺴기를 사용한 경우
+        cnt += 1
+        ret = max(ret, recur(cur + 1, 1) + raw[cur])
+        cnt -= 1
+
+    dp[cur][use] = ret
+    return dp[cur][use]
+
 N = int(input())
-arr = list(map(int, input().split()))
-max_sum = -(1 << 64)
-stack = []
-
-# 한 번의 밑장 빼기를 고려하여 가능한 모든 경우를 탐색
-for i in range(N):
-    # i번째 카드를 밑장으로 빼는 경우
-    card_sum = 0
-    stack.append(arr[i])
-    required_plus = False
-    for j in range(0,N,2):
-        if j == i:
-            required_plus = True
-        if j != i:  # 밑장을 빼는 경우는 건너뜀
-            card_sum += arr[j]
-    if required_plus:
-        card_sum += arr[i]
-    max_sum = max(max_sum, card_sum)
-
-print(max_sum)
+raw = list(map(int, input().split()))
+cnt = 0
+dp = [[-1, -1] for _ in range(N)]
+ans = recur(0, 0)
+print(ans)
